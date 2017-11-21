@@ -6,43 +6,38 @@ import {
   ScrollView,
   Image
 } from 'react-native'
-import { Card } from 'react-native-elements'
-import FitImage from 'react-native-fit-image';
 import axios from 'axios'
+import { Card } from 'react-native-elements'
 
-
-export default class MainContent extends Component {
+export default class ListContent extends Component {
   constructor () {
     super()
     this.state = {
-      news: []
+      listNews: []
     }
   }
   componentDidMount () {
     const url = 'https://newsapi.org/v2/everything?domains=wsj.com&apiKey=e339ce0c756d41b4b750a34a5f778ccf'
     axios.get(url)
-    .then(respond => {
+    .then(response => {
       this.setState({
-        news: respond.data
+        listNews: response.data
       })
     })
     .catch(err => {
       console.log(err)
     })
   }
-
-  render() {
+  render () {
     return (
       <ScrollView styles={styles.contentContainer}>
         <Card title="Your News Today From Google APi">
-        { this.state.news.length == 0 ?
+        { this.state.listNews.length == 0 ?
             <Text>Loading ....</Text> :
-            this.state.news.articles.map((data, i) => {
+            this.state.listNews.articles.map((data, i) => {
               return (
                 <View key={i}>
-                <FitImage  source={{ uri: data.urlToImage }} style={styles.fitImage} ></FitImage>
                 <Text style={{fontWeight: 'bold' }} > { data.title } </Text>
-                <Text> { data.description } </Text>
               </View>
               )
             })
@@ -58,12 +53,5 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'justify',
     padding: 20
-  },
-  fitImage: {
-    borderRadius: 20,
-  },
-  fitImageWithSize: {
-    height: 100,
-    width: 30,
-  },
+  }
 });
