@@ -6,9 +6,14 @@ import {
   ScrollView,
   View,
   Image,
+  TouchableOpacity
 } from 'react-native';
 
-export default class App extends React.Component {
+import { StackNavigator } from 'react-navigation'
+
+import articleScreen from './src/article'
+
+class App extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -30,27 +35,43 @@ export default class App extends React.Component {
 
   render() {
     // console.log("------------>", this.state.news);
+    const { navigate } = this.props.navigation
     return (
       <ScrollView style={ styles.container }>
-        <Text style={{'textAlign':'center'}}>Articles</Text>
         {this.state.news.map((article, index) => {
           return (
-            <View style={ styles.articleItem } key={index}>
+            <TouchableOpacity style={ styles.articleItem } key={index} onPress={ () => navigate('Article', { article: article})}>
               <Image
                 style={{width: 50, height: 50, borderRadius: 100, marginRight:5}}
                 source={{uri: article.urlToImage}}
               />
               <View style={ styles.articleItemText }>
                 <Text style={ styles.articleTitle }>{ article.title }</Text>
-                <Text>{ article.description.substring(0, 60) } ...</Text>
+                <Text style={ styles.articleDescription }>{ article.description.substring(0, 60) } ...</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )
         })}
       </ScrollView>
     );
   }
 }
+
+const AppNav = StackNavigator({
+  Home: {
+    screen: App,
+    navigationOptions: {
+      headerTitle: 'Home'
+    }
+  },
+  Article: {
+    screen: articleScreen,
+    navigationOptions: {
+      headerTitle: 'Article',
+      headerBackTitle: 'Back'
+    }
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +87,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderStyle: 'solid',
     borderBottomColor: 'red',
-    padding: 10
+    padding: 10,
+    backgroundColor: 'black',
+    opacity: 0.8
   },
 
   articleItemText: {
@@ -78,5 +101,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     color: 'red'
+  },
+
+  articleDescription: {
+    color: 'white'
   }
 });
+
+export default AppNav;
