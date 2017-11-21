@@ -33,11 +33,7 @@ class Details extends Component {
             <View>
                 <Text>{item.title}</Text>
                 <Image style={{width: 1080, height: 1080}} source={{uri:item.urlToImage}} alt="Source"/>
-                <Text>{ item.description }</Text>
-                <Text style={{color: 'blue'}}
-                onPress={() => Linking.openURL(`${item.uri}`)}>
-                Original Article
-                </Text>
+                <Text onPress={() => Linking.openURL(item.url)}>{ item.description }</Text>
             </View>
             }
             />
