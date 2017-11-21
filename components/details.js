@@ -1,40 +1,43 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import {
     Text,
     View,
     ScrollView,
     Image,
     FlatList,
-    Button
+    Linking
   } from 'react-native';
 
 import { 
-  fetchNews
+  fetchNews,
+  getDetail
 } from '../actions/index'
 
-class Home extends Component {
+class Details extends Component {
     constructor(props) {
         super()
         this.state = {
-            items: []
+            details: []
         }
     }
 
     render() {
-        const { navigate } = this.props.navigation
         return (
             <View>
-            <Text>Hai saya home page</Text>
-            {this.props.items.articles !== undefined ? 
+            <Text>Detail Page</Text>
+            {this.props.details !== undefined ? 
             <FlatList
-            data={this.props.items.articles}
+            data={this.props.details}
             renderItem={({item}) =>
             <View>
                 <Text>{item.title}</Text>
-                <Button title="Details" onPress={() => navigate('DetailsScreen', {id: item.title})}/>
                 <Image style={{width: 1080, height: 1080}} source={{uri:item.urlToImage}} alt="Source"/>
+                <Text>{ item.description }</Text>
+                <Text style={{color: 'blue'}}
+                onPress={() => Linking.openURL(`${item.uri}`)}>
+                Original Article
+                </Text>
             </View>
             }
             />
@@ -46,24 +49,25 @@ class Home extends Component {
     }
 
   componentWillMount() {
-    this.props.fetchNews()
+    this.props.getDetail(this.props.navigation.state.params.id)
+    console.log(this.props.details)   
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchNews: () => dispatch(fetchNews())
+      getDetail: (params) => dispatch(getDetail(params))
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-      items: state.items
+      details: state.details
   }
 }
 
 var ConnectedComponent = connect(
   mapStateToProps, mapDispatchToProps
-)(Home)
+)(Details)
 
 export default ConnectedComponent
