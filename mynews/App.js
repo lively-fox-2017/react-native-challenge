@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View ,Button,Image,ScrollView} from 'react-native';
 import axios from 'axios'
 // import { Card } from 'react-native-elements'
+import { StackNavigator } from 'react-navigation';
+import ArticleItem from './ArticleItem'
 
-export default class App extends Component {
+class App extends Component {
   constructor(){
     super()
     this.state={
@@ -20,15 +22,18 @@ export default class App extends Component {
     })
   }
 
+
   render() {
+    const { navigate } = this.props.navigation
     return (
       <ScrollView>
       <View style={styles.container}>
-        {this.state.articles.map((item)=>{
+        {this.state.articles.map((item,index)=>{
           return(
-            <View>
-            <Image source={{uri: item.urlToImage}} style={{width: 90, height: 90}} />
+            <View key={index}>
+            <Image source={{uri: item.urlToImage}} style={{width: 300, height: 90}} />
             <Text>{item.title}</Text>
+            <Button title="Detail" onPress={() => navigate('Detail', { Article: item }) } />
             </View>
 
           )
@@ -39,11 +44,18 @@ export default class App extends Component {
   }
 }
 
+const AppNav = StackNavigator({
+  Home: { screen: App },
+  Detail: { screen: ArticleItem },
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
+
+export default AppNav
