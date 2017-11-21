@@ -4,6 +4,8 @@ import {
   Text,
   View,
   Image,
+  Linking,
+  TouchableOpacity
 } from 'react-native'
 
 class Article extends React.Component{
@@ -19,10 +21,19 @@ class Article extends React.Component{
           style={{width: '100%', height: 300, marginBottom: 10, marginTop: 10}}
           source={{uri: prop.urlToImage}}
         />
-        <Text style={ styles.articleDescription }>
-          { prop.description }
-
-        </Text>
+        <Text style={ styles.articleDescription }>{ prop.description }</Text>
+        <TouchableOpacity
+          onPress={ () => Linking.canOpenURL(url).then( (supported) => {
+            if (!supported) {
+              console.log("Cant handle this url ", url);
+            } else {
+              return Linking.openURL(url)
+            }
+          }).catch((reason) => {
+            console.log("Error ", reason);
+          })}>
+         <Text style={ styles.articleLink }>Continue Reading</Text>
+       </TouchableOpacity>
       </View>
     )
   }
@@ -48,6 +59,11 @@ const styles = StyleSheet.create({
 
   articleDescription: {
     color: 'white',
+    fontSize: 18
+  },
+
+  articleLink: {
+    color: 'orange',
     fontSize: 18
   }
 })
