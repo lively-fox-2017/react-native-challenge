@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet,
   Text,
-  View
+  ScrollView
 } from 'react-native';
 
 import axios from 'axios'
@@ -13,12 +13,14 @@ export default class App extends React.Component {
       news: []
     }
   }
-  //
-  componentWillMount () {
+
+  componentDidMount () {
     const url = 'https://newsapi.org/v2/everything?domains=wsj.com&apiKey=e339ce0c756d41b4b750a34a5f778ccf'
     axios.get(url)
-    .then(resp => {
-      this.state.news = resp
+    .then(respond => {
+      this.setState({
+        news: respond.data
+      })
     })
     .catch(err => {
       console.log(err)
@@ -27,21 +29,21 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
+      <ScrollView styles={styles.contentContainer}>
         <Text>HERE WE GO.</Text>
-        {console.log(this.state.news)}
-        {/* {if (this.state.news.articles) {
-        <Text> { this.state.news.articles } </Text>
-        }} */}
-      </View>
+        { this.state.news.length == 0 ?
+            <Text>Loading ....</Text> :
+            this.state.news.articles.map((data, i) => {
+              return <Text key={i}>{ data.description }</Text>
+            })
+        }
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contentContainer: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
