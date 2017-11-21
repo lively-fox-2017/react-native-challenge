@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, FlatList, View, StyleSheet } from 'react-native';
 import axios from 'axios';
 
 export default class Other extends Component {
@@ -22,16 +22,28 @@ export default class Other extends Component {
     })
     .then(({data}) => {
       this.setState({
-        quotes: data,
+        quotes: data.map((quoteDetail) => {return {quote: quoteDetail.quote, from: quoteDetail.author, key: (Math.random()*100)}}),
       })
     })
   }
 
   render() {
     return (
-      <Text>
-        {JSON.stringify(this.state.quotes)}
-      </Text>
+      <View>
+      <FlatList
+        data={this.state.quotes}
+        renderItem={({item}) => (<View style={styles.quoteContainer}><Text style={styles.quote}>{item.quote}</Text><Text>-{item.from}-</Text></View>)}
+      />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  quote: {
+    fontSize: 20,
+  },
+  quoteContainer: {
+     borderRadius: 4, borderWidth: 0.5, borderColor: '#d6d7da',
+  }
+})
