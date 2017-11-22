@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from 'react-native-elements'
 import { ScrollView, StyleSheet, Dimensions, Text } from 'react-native'
 import axios from 'axios'
+import shuffle from 'shuffle-array'
 
 export default class Home extends React.Component {
   constructor () {
@@ -23,24 +24,24 @@ export default class Home extends React.Component {
     const { navigate } = this.props.navigation
     var sources = [<Text key="1"></Text>]
     if (this.state.sources.length > 0) {
+      shuffle(this.state.sources)
       sources.pop()
       for(let i = 0; i < 5; i++) {
-        var randomed = Math.round(Math.random() * this.state.sources.length)
+        // var randomed = Math.round(Math.random() * this.state.sources.length)
         sources.push(
             <Button
               key={i}
               style={styles.buttonNews}
               raised
               icon={{name: 'library-books', color:'white'}}
-              title={this.state.sources[randomed].name}
+              title={this.state.sources[i].name}
               color="white"
               backgroundColor="black"
               onPress={() =>
-                navigate('News', { name: this.state.sources[randomed].name, id:this.state.sources[randomed].id })
+                navigate('News', { name: this.state.sources[i].name, id:this.state.sources[i].id })
               }
             />
         )
-        console.log(this.state.sources[randomed])
       }
     }
     return sources
