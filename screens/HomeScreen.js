@@ -8,10 +8,24 @@ import {
   Image,
   Button,
 } from 'react-native';
+import { connect } from 'react-redux';
 
-import { openDota, openDotaURI } from '../helpers';
+import { requestHeroes } from '../actions/heroActions';
+import { openDotaURI } from '../helpers';
 
-export default class HomeScreen extends React.Component {
+const mapStateToProps = (state) => {
+  return {
+    heroes: state.heroReducer.heroes,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    requestHeroes: () => dispatch(requestHeroes()),
+  };
+};
+
+export class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Dota 2 Heroes',
     headerStyle: {
@@ -19,24 +33,12 @@ export default class HomeScreen extends React.Component {
     },
   }
 
-  constructor() {
-    super();
-    this.state = {
-      heroes: [],
-    };
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
-    openDota
-      .get('/heroStats')
-      .then(({ data }) => {
-        this.setState({
-          heroes: data
-        });
-      })
-      .catch((err) => {
-        console.log('GET /heroStats ERR:', err);
-      });
+    this.props.requestHeroes();
   }
 
   render() {
@@ -44,9 +46,9 @@ export default class HomeScreen extends React.Component {
 
     return (
       <View>
-        { !this.state.heroes.length && <ActivityIndicator/> }
+        { !this.props.heroes.length && <ActivityIndicator/> }
         <FlatList
-          data={ this.state.heroes }
+          data={ this.props.heroes }
           keyExtractor={ (item) => item.id }
           renderItem={ ({ item }) => {
             return (
@@ -108,3 +110,8 @@ const styles = StyleSheet.create({
     color: 'gray'
   }
 });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen);

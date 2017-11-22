@@ -1,14 +1,17 @@
 import React from 'react';
 import {
-  StackNavigator
-} from 'react-navigation';
+  Provider
+} from 'react-redux';
 
-import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/DetailsScreen';
+import store from './store';
+import Navigator from './Navigator'
 
-const Navigator = StackNavigator({
-  Home: { screen: HomeScreen },
-  Details: { screen: DetailsScreen }
-});
-
-export default Navigator;
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={ store }>
+        <Navigator/>
+      </Provider>
+    );
+  }
+};
