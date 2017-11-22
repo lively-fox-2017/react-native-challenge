@@ -10,7 +10,6 @@ export const fetchAllVideo = (listVideo) => {
 }
 
 export const paramChange = (param) => {
-  // console.log('xxxxxx', param);
   return {
     type: 'param_change',
     payload: {
@@ -32,6 +31,7 @@ export const fetchAllVideoAPI = () => {
 }
 
 export const fetchAllVideoByParamAPI = (param) => {
+  // alert(param)
   return (dispatch, getState) => {
     axios.get ('https://www.googleapis.com/youtube/v3/search?part=snippet&q='+param+'&type=video&key=AIzaSyD36XAU2xCZCinLW7GnkoLSgmelqNV4_Dg&maxResults=8')
     .then(response => {

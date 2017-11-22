@@ -1,27 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { Provider } from 'react-redux'
+import {StyleSheet} from 'react-native'
 import store from './store'
-import HomeScreen from './components/HomeScreen'
+import RouterApp from './RouterApp'
 
 export default class App extends React.Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     isReady: false
-  //   };
-  // }
-
-
   render() {
     return (
       <Provider store={store}>
-      <View style={styles.container}>
-        <Text>React-challange-native</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-        <HomeScreen></HomeScreen>
-      </View>
+        <RouterApp/>
+        {/* <View style={styles.container}>
+          <Text>React-challange-native</Text>
+          <Text>Changes you make will automatically reload.</Text>
+          <Text>Shake your phone to open the developer menu.</Text>
+          <HomeScreen></HomeScreen>
+        </View> */}
       </Provider>
     );
   }

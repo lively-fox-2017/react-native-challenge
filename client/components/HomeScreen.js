@@ -1,43 +1,58 @@
 import React, { Component } from 'react'
-import ListVideo from './ListVideo'
+import ListScreen from './ListScreen'
 import { connect } from 'react-redux'
 import { paramChange, fetchAllVideoAPI, fetchAllVideoByParamAPI } from '../actions/listVideoActions'
-import {StyleSheet, Text, View, TextInput, Button} from 'react-native'
+import {StyleSheet, Text, View, TextInput, Button, FlatList, Image} from 'react-native'
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props)
-
-    // this.handleChange = this.handleChange.bind(this)
   }
-  // searchVideo(param){
-  //   console.log('inii param', param);
-  //   this.props.fetchAllVideoByParam(param)
-  // }
+
+  // static navigationOptions = {
+  //   title: 'Welcome',
+  // };
+
+  searchVideo(param){
+    console.log(param);
+    this.props.fetchAllVideoByParam(param)
+  }
   componentDidMount(){
     this.props.fetchAllVideo()
   }
-  // handleChange(event){
-  //   this.props.paramChange(event.target.value);
-  //   console.log('ini props param', this.props.param);
-  //   event.preventDefault();
-  // }
   render(){
+    const { navigate } = this.props.navigation
     return(
       <View>
-        {/* <Text>Home Screen</Text> */}
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.props.paramChange({text})}
+          onChangeText={(text) => this.props.paramChange(text)}
           value={this.props.param}
         />
         <Button
-          onPress={()=>this.props.fetchAllVideoByParam(this.props.param)}
+          onPress={()=>this.searchVideo(this.props.param)}
           title="Search"
           color="#841584"
           accessibilityLabel="Search"
         />
-        <ListVideo listVideo={this.props.listVideo}></ListVideo>
+        {/* <ListScreen listVideo={this.props.listVideo}></ListScreen> */}
+        <FlatList
+          data={this.props.listVideo}
+          renderItem={({item, index}) => (            
+            <View key={index}>
+              <Text>{item.snippet.title}</Text>
+              <Image
+                style={{width: 150, height: 150}}
+                source={{uri: item.snippet.thumbnails.medium.url}}
+              />
+              <Text>{item.snippet.publishedAt}</Text>
+              <Button
+                onPress={() => navigate('DetailScreen', {id: item.id})}
+                title="Watch"
+              />
+            </View>
+          )}
+        />
       </View>
     )
   }
