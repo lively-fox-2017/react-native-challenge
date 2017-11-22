@@ -5,7 +5,8 @@ import {
   View,
   ScrollView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from 'react-native'
 import axios from 'axios'
 import { Card } from 'react-native-elements'
@@ -47,6 +48,11 @@ export default class ListContent extends Component {
               )
             })
         }
+        <Button
+          onPress = { () => this.props.navigation.navigate('ReduxReact')}
+          color="#841584"
+          title="React Redux News Content"
+          ></Button>
       </Card>
       </ScrollView>
     );
