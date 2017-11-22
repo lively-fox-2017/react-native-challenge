@@ -1,86 +1,63 @@
 import React from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import { Constants, Location, Permissions } from 'expo';
-import { Dimensions, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Image, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+
+import { getRestaurantsFromZomatoApi } from './../actions/RestaurantActions';
 
 
-export default class Home extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      restaurants: null
-    }
-  }
+const mapStateToProps = (state) => ({
+  restaurants: state.RestaurantReducer.restaurants
+});
 
-  _getLocationAsync() {
-    return new Promise((resolve, reject) => {
-      Permissions.askAsync(Permissions.LOCATION)
-      .then(resp => {
-        if (resp.status === 'granted') return Location.getCurrentPositionAsync({});
-      })
-      .then(location => {
-        resolve(location)
-      })
-      .catch(err => {
-        reject(err);
-      });
-    });
-  };
+const mapDispatchToProps = (dispatch) => ({
+  getRestaurantsFromZomatoApi: (lat, lon) => dispatch(getRestaurantsFromZomatoApi(lat, lon))
+});
 
-  _getRestaurantsFromZomatoApi(lat, lon) {
-    const URL = `https://developers.zomato.com/api/v2.1/search?lat=${lat}&lon=${lon}`;
-    return axios.get(URL, {headers: {'user-key': '668cf0ff7ba91ccbeafd4ae1c6159916'}});
-  }
-
+class Home extends React.Component {
   componentDidMount() {
-    this._getLocationAsync()
-    .then(location => {
-      return this._getRestaurantsFromZomatoApi(location.coords.latitude, location.coords.longitude);
+    Permissions.askAsync(Permissions.LOCATION)
+    .then(resp => {
+      if (resp.status === 'granted') return Location.getCurrentPositionAsync({});
     })
-    .then(response => {
-      const restaurants = response.data.restaurants.map(restaurant => {
-        return {
-          id: restaurant.restaurant.id,
-          name: restaurant.restaurant.name,
-          location: restaurant.restaurant.location.address,
-          cuisines: restaurant.restaurant.cuisines,
-          image: restaurant.restaurant.featured_image.replace('?output-format=webp', '')
-        }
-      });      
+    .then(location => {
+      const latitude = location.coords.latitude;
+      const longitude = location.coords.longitude;
 
-      this.setState({restaurants})
+      this.props.getRestaurantsFromZomatoApi(latitude, longitude)
     })
     .catch(err => {
-      throw err;
+      reject(err);
     });
   }
 
   render() {
     const { navigate } = this.props.navigation;
-    let restaurants = <Text>Loading ...</Text>;
-
-    if (this.state.restaurants) {
-      restaurants = this.state.restaurants.map(rest => (
-        <TouchableOpacity style={styles.wrapper} key={rest.id} onPress={ () => navigate('Restaurant', {restaurant: rest})}>
-          <Image
-            source={{uri: rest.image ? rest.image : 'https://logopond.com/logos/a447d60b6c1ffcfcb618ed05ecd9a679.png'}}
-            style={styles.fullWidthImage}
-            resizeMode='cover'
+    if (!this.props.restaurants) {
+      return <Text>Loading ...</Text>
+    } else {
+      return (
+        <View style={styles.container}>
+          <FlatList
+            data={this.props.restaurants}
+            keyExtractor={(item, index) => item.id}
+            renderItem={({item}) => (
+              <TouchableOpacity style={styles.wrapper} onPress={ () => navigate('Restaurant', {restaurant: item})}>
+                <Image
+                  source={{ uri: item.featured_image }}
+                  style={ styles.fullWidthImage }
+                  resizeMode='cover'
+                />
+                <View style={styles.textWrapper}>
+                  <Text style={styles.titleText}>{item.name}</Text>
+                  <Text>{item.location.locality_verbose}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           />
-          <View style={styles.textWrapper}>
-            <Text style={styles.titleText}>{rest.name}</Text>
-            <Text>{rest.location}</Text>
-          </View>
-        </TouchableOpacity>
-      ))
+        </View>
+      );
     }
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-        { restaurants }
-        </ScrollView>
-      </View>
-    );
   }
 }
 
@@ -112,3 +89,5 @@ const styles = StyleSheet.create({
     width: fullwidth
   },
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
