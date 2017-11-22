@@ -7,7 +7,8 @@ import {
     ScrollView,
     Image,
     FlatList,
-    TouchableOpacity  } from 'react-native';
+    TouchableOpacity,
+} from 'react-native';
 import { Container, 
     Header, 
     Title, 

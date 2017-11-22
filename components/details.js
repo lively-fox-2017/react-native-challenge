@@ -6,7 +6,7 @@ import {
     Image,
     FlatList,
     TouchableOpacity,
-    Linking  
+    Linking,  
 } from 'react-native';
 
 import { Container, 

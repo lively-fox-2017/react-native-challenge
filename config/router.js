@@ -7,17 +7,20 @@ import Details from '../components/details'
 
 const Stack = StackNavigator({
         HomeScreen: {
-            screen: Home
+            screen: Home,
+            navigationOptions: ({navigation}) => ({
+                title: `News Events`,
+                headerStyle: {backgroundColor: '#1E90FF'},                
+            }),
         },
         DetailsScreen : {
-            screen: Details
+            screen: Details,
+            navigationOptions: ({navigation}) => ({
+                title: `${navigation.state.params.id}`,
+                headerStyle: {backgroundColor: '#1E90FF'},
+            }),
         }
-    },
-    {
-      cardStyle: {
-        paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
-      }
-    }   
+    }
 )
 
 
