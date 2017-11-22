@@ -10,8 +10,6 @@ export const setNews = (news) => {
 }
 
 export const loadNewsFromApi = () => {
-  console.log('masuk')
-  alert('masuk actions')
   return (dispatch, state) => {
     let url = 'https://newsapi.org/v2/everything?domains=wsj.com&apiKey=e339ce0c756d41b4b750a34a5f778ccf'
     axios.get(url)

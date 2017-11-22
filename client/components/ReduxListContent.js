@@ -30,7 +30,7 @@ class ReduxListContent extends Component {
               return (
                 <View key={i}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Main', {mainArticle: data })}
+                  onPress={() => this.props.navigation.navigate('ReduxMainContent', {mainArticle: data })}
                 >
                   <Text style={{fontWeight: 'bold' }} > { data.title } </Text>
               </TouchableOpacity>
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     padding: 20
   }
-})
+});
+
 
 const listContentConnect = connect(
   mapStateToProps,
