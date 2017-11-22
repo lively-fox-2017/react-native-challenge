@@ -4,7 +4,8 @@ import {
   Text,
   View,
   ScrollView,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native'
 import axios from 'axios'
 import { Card } from 'react-native-elements'
@@ -37,7 +38,11 @@ export default class ListContent extends Component {
             this.state.listNews.articles.map((data, i) => {
               return (
                 <View key={i}>
-                <Text style={{fontWeight: 'bold' }} > { data.title } </Text>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Main', {mainArticle: data })}
+                >
+                  <Text style={{fontWeight: 'bold' }} > { data.title } </Text>
+              </TouchableOpacity>
               </View>
               )
             })

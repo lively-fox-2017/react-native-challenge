@@ -12,42 +12,22 @@ import axios from 'axios'
 
 
 export default class MainContent extends Component {
-  constructor () {
-    super()
-    this.state = {
-      news: []
-    }
-  }
-  componentDidMount () {
-    const url = 'https://newsapi.org/v2/everything?domains=wsj.com&apiKey=e339ce0c756d41b4b750a34a5f778ccf'
-    axios.get(url)
-    .then(respond => {
-      this.setState({
-        news: respond.data
-      })
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
-
   render() {
+    let article = this.props.navigation.state.params.mainArticle
+    // console.log(article)
     return (
+      // <Text>{ JSON.stringify(article.author) }</Text>
+      // <Text>{ article.description }</Text>
       <ScrollView styles={styles.contentContainer}>
-        <Card title="Your News Today From Google APi">
-        { this.state.news.length == 0 ?
-            <Text>Loading ....</Text> :
-            this.state.news.articles.map((data, i) => {
-              return (
-                <View key={i}>
-                <FitImage  source={{ uri: data.urlToImage }} style={styles.fitImage} ></FitImage>
-                <Text style={{fontWeight: 'bold' }} > { data.title } </Text>
-                <Text> { data.description } </Text>
+        <View>
+        <Card title="Your News Today From Google APi" >
+                <View>
+                <FitImage  source={{ uri: article.urlToImage }} style={styles.fitImage} ></FitImage>
+                <Text style={{fontWeight: 'bold' }} > { article.title } </Text>
+                <Text> { article.description } </Text>
               </View>
-              )
-            })
-        }
       </Card>
+    </View>
       </ScrollView>
     );
   }
