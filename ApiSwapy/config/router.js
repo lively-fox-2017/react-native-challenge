@@ -6,7 +6,7 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import ListApi from '../components/ListApi';
-import DataHeroes from '../components/DataHeroes';
+import ListBerita from '../components/ListBerita';
 // ini adalah router
 export const Tabs = StackNavigator({
   ListApi: {
@@ -15,10 +15,10 @@ export const Tabs = StackNavigator({
       headerTitle: 'Home',
     },
   },
-  DataHeroes: {
-    screen: DataHeroes,
+  ListBerita: {
+    screen: ListBerita,
     navigationOptions: {
-      headerTitle: 'back to home',
+      headerTitle: 'back to List berita',
     },
   },
 })

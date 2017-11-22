@@ -13,7 +13,7 @@ import axios from 'axios'
 import { StackNavigator } from 'react-navigation'
 import { List, ListItem, Card } from 'react-native-elements'
 
-export default class ListApi extends Component {
+export default class ListBerita extends Component {
   constructor() {
     super()
     this.state = {
@@ -42,24 +42,16 @@ export default class ListApi extends Component {
   render() {
     const { navigate }  = this.props.navigation
     return (
-        <View containerStyle={{marginBottom: 20}}>
-            <Button
-              onPress={ () => navigate('ListBerita')}
-              title="ListBerita"
-            />
+        <View containerStyle={{marginBottom: 0}}>
             <FlatList
               data={this.state.swapi}
               renderItem={({ item }) => (
-                <Card
-                  title={item.title}
-                   >
-                   <Image
-                    style={{width: 300, height: 100}}
-                    source={{uri: item.urlToImage}}
-                  />
-                  <Text style={{marginBottom: 10}}>
-                    {item.description}
-                  </Text>
+                <Card>
+                   <ListItem
+                     roundAvatar
+                     title={item.title}
+                     avatar={{uri:item.urlToImage}}
+                   />
                 </Card>
               )}
             />
