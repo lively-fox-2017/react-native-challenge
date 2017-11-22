@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
-  ScrollView,
+  FlatList,
   View,
   Text,
   Image,
@@ -42,36 +42,38 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <ScrollView style={ styles.container }>
-        {
-          this.state.heroes.map((hero, index) => {
-            return (
-              <View key={ index } style={ styles.heroContainer }>
-                <View style={ styles.hero }>
-                  <Image
-                    style={{ width: 128, height: 72 }}
-                    source={{ uri: openDotaURI + hero.img }}
-                  />
-                  <Text style={ styles.heroName }>
-                    { hero.localized_name } { '\n' }
-                    <Text style={ styles.heroAttr }>
-                      <Text style={ styles.heroAttrTitle }>
-                        Attr:
-                      </Text>
-                      { hero.primary_attr.toUpperCase() }
-                    </Text>
-                  </Text>
-                </View>
-                <Button
-                  onPress={ () => navigate('Details', { hero: hero }) }
-                  title="Hero Details"
-                  color="#c0392b"
+      <FlatList
+        data={ this.state.heroes }
+        keyExtractor={ (item) => item.id }
+        renderItem={ ({ item }) => {
+          return (
+            <View style={ styles.heroContainer }>
+              <View style={ styles.hero }>
+                <Image
+                  style={{ width: 128, height: 72 }}
+                  source={{ uri: openDotaURI + item.img }}
                 />
+                <Text style={ styles.heroName }>
+                  { item.localized_name } { '\n' }
+                  <Text style={ styles.heroAttr }>
+                    <Text style={ styles.heroAttrTitle }>
+                      Attr:
+                    </Text>
+                    { item.primary_attr.toUpperCase() }
+                  </Text>
+                </Text>
               </View>
-            );
-          })
-        }
-      </ScrollView>
+              <Button
+                onPress={ () => navigate('Details', { hero: item }) }
+                title="Hero Details"
+                color="#c0392b"
+              />
+            </View>
+          );
+        } }
+      />
+
+
     );
   }
 }
