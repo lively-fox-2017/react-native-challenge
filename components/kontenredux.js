@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Hyperlink from 'react-native-hyperlink';
 
-export default class HomeScreendua extends React.Component {
+export default class KontenRedux extends React.Component {
   static navigationOptions = {
-    title: 'Konten Native API'
+    title: 'Konten Native Redux & Thunk'
   };
 
   constructor(props) {

@@ -1,55 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import axios from 'axios'
 
-export default class HomeScreen extends React.Component {
+import {dapatkanBerita} from '../actions/index'
+import {connect} from 'react-redux'
+
+class HomeScreenRedux extends React.Component {
   static navigationOptions = {
-    title: 'Home Native API'
+    title: 'Home Native Redux & Thunk'
   };
 
   constructor(props) {
     super(props)
     this.state = {
-      dataApi: []
+      data: []
     }
   }
 
   componentWillMount () {
-    let self = this
-    axios.get('https://newsapi.org/v1/articles?source=ars-technica&sortBy=top&apiKey=080e457774e54e00b8fd9315ed37c24d')
-    .then(function (response) {
-      const dataApi = response.data.articles
-      self.setState({dataApi})
-      // console.log(self.state.dataApi)
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-    console.log('bisa karna biasa', self.state.dataApi)
+    this.props.dapatkanBerita()
   }
 
   render() {
+    // console.log(this.state.data)
     const { navigate } = this.props.navigation;
-    // alert(JSON.stringify(this.props.navigation))
     return (
       <View style={styles.container}>
 
-      <Button
-        onPress={() => navigate('HomeScreenRedux')}
-        title="Mode React Redux Click Disini"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-
        <ScrollView contentContainerStyle={styles.contentContainer}>
 
-        {this.state.dataApi.map((data, key) => {
+        {this.props.allnews.map((data, key) => {
           return (
 
             <View style={[styles.pembungkus]} key={key}>
               <View style={[styles.kontainer]}>
-                <TouchableOpacity onPress={() => navigate('Homedua', {data: data})}><Text style={[styles.judul]}>{data.title}</Text>
+                <TouchableOpacity onPress={() => navigate('KontenRedux', {data: data})}><Text style={[styles.judul]}>{data.title}</Text>
                 <Text style={[styles.description]}>{data.description}</Text></TouchableOpacity>
               </View>
 
@@ -65,6 +50,22 @@ export default class HomeScreen extends React.Component {
 
       </View>
     );
+  }
+}
+
+const mapState = state => {
+  // console.log('halo', state.allnews.allnews)
+  return {
+    allnews: state.allnews.allnews
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  console.log('coba')
+  return {
+    dapatkanBerita: () => dispatch(dapatkanBerita()),
+    // hapususer: (id) => dispatch(hapususer(id)),
+    // getUserSatuan: (id) => dispatch(getUserSatuan(id))
   }
 }
 
@@ -84,3 +85,10 @@ const styles = StyleSheet.create({
     flexDirection:'column',
   },
 });
+
+const home = connect(
+  mapState,
+  mapDispatchToProps
+)(HomeScreenRedux)
+
+export default home;
