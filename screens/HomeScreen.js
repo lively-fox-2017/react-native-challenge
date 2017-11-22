@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   FlatList,
+  ActivityIndicator,
   View,
   Text,
   Image,
@@ -42,36 +43,39 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <FlatList
-        data={ this.state.heroes }
-        keyExtractor={ (item) => item.id }
-        renderItem={ ({ item }) => {
-          return (
-            <View style={ styles.heroContainer }>
-              <View style={ styles.hero }>
-                <Image
-                  style={{ width: 128, height: 72 }}
-                  source={{ uri: openDotaURI + item.img }}
-                />
-                <Text style={ styles.heroName }>
-                  { item.localized_name } { '\n' }
-                  <Text style={ styles.heroAttr }>
-                    <Text style={ styles.heroAttrTitle }>
-                      Attr:
+      <View>
+        { !this.state.heroes.length && <ActivityIndicator/> }
+        <FlatList
+          data={ this.state.heroes }
+          keyExtractor={ (item) => item.id }
+          renderItem={ ({ item }) => {
+            return (
+              <View style={ styles.heroContainer }>
+                <View style={ styles.hero }>
+                  <Image
+                    style={{ width: 128, height: 72 }}
+                    source={{ uri: openDotaURI + item.img }}
+                  />
+                  <Text style={ styles.heroName }>
+                    { item.localized_name } { '\n' }
+                    <Text style={ styles.heroAttr }>
+                      <Text style={ styles.heroAttrTitle }>
+                        Attr:
+                      </Text>
+                      { item.primary_attr.toUpperCase() }
                     </Text>
-                    { item.primary_attr.toUpperCase() }
                   </Text>
-                </Text>
+                </View>
+                <Button
+                  onPress={ () => navigate('Details', { hero: item }) }
+                  title="Hero Details"
+                  color="#c0392b"
+                />
               </View>
-              <Button
-                onPress={ () => navigate('Details', { hero: item }) }
-                title="Hero Details"
-                color="#c0392b"
-              />
-            </View>
-          );
-        } }
-      />
+            );
+          } }
+        />
+      </View>
 
 
     );
