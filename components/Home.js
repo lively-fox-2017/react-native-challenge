@@ -36,7 +36,6 @@ class Home extends React.PureComponent {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify( this.props)}</Text>
         <TouchableOpacity onPress={() => {navigate('MovieDetail', {})}}>
           <Text style={styles.quote}>{ this.state.quote }</Text>
           <Text>-{ this.state.from }-</Text>

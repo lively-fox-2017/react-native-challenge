@@ -4,7 +4,6 @@ function fetchMovieByTitle(title) {
   return (dispatch) => {
     axios.get(`http://www.omdbapi.com/?t=${title}&apikey=d152fbcf`)
     .then(({ data })=>{
-      alert(JSON.stringify(data))
       dispatch(setMovieDetail(data))
     })
 
@@ -12,8 +11,6 @@ function fetchMovieByTitle(title) {
 }
 
 function setMovieDetail(movieDetail={}) {
-  console.log(movieDetail);
-  alert(JSON.stringify(movieDetail))
   return {
     type: 'SET_MOVIE_DETAIL',
     state: {
@@ -24,7 +21,8 @@ function setMovieDetail(movieDetail={}) {
       director: movieDetail.hasOwnProperty('Director') ? movieDetail.Director : '',
       actors: movieDetail.hasOwnProperty('Actors') ? movieDetail.Actors : '',
       poster: movieDetail.hasOwnProperty('Poster') ? movieDetail.Poster : '',
-      imdbRating: movieDetail.hasOwnProperty('imdbRating') ? movieDetail.imdbRating : ''
+      imdbRating: movieDetail.hasOwnProperty('imdbRating') ? movieDetail.imdbRating : '',
+      plot: movieDetail.hasOwnProperty('Plot') ? movieDetail.Plot : '',
     }
   };
 }
