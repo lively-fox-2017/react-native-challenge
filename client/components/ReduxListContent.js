@@ -22,8 +22,8 @@ class ReduxListContent extends Component {
   render () {
     return (
       // <Text> { JSON.stringify(this.props.news) } </Text>
-      <ScrollView styles={styles.contentContainer}>
-        <Card title="Your News Today From Google APi">
+      <ScrollView >
+        <Card wrapperStyle={styles.contentContainer} title="Your News Today From Google APi">
         { this.props.news.length == 0 ?
             <Text>Loading ....</Text> :
             this.props.news.articles.map((data, i) => {
@@ -65,7 +65,9 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     textAlign: 'justify',
-    padding: 20
+    padding: 20,
+    backgroundColor: 'red',
+    color: 'blue'
   }
 });
 
