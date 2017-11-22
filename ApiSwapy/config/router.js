@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 
 import ListApi from '../components/ListApi';
 import DataHeroes from '../components/DataHeroes';
-
+// ini adalah router
 export const Tabs = StackNavigator({
   ListApi: {
     screen: ListApi,
