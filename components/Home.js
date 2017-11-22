@@ -1,13 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 
-import { Font } from 'expo';
-// import FontAwesome, { Icons } from 'react-native-fontawesome';
-// import FontAwesome, {Icons} from 'react-native-fontawesome';
-// import Icon from 'react-native-vector-icons/FontAwesome';
+import actions from '../redux/actions/MovieDetail';
 
-export default class Home extends React.Component {
+class Home extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,15 +14,6 @@ export default class Home extends React.Component {
       fontLoaded: true,
     }
   }
-
-
-  // async componentWillMount() {
-  //   await Font.loadAsync({
-  //     'FontAwesome': require('./assets/fonts/FontAwesome.otf'),
-  //   });
-  //
-  //   this.setState({ fontLoaded: true });
-  // }
 
   componentDidMount() {
 
@@ -39,6 +28,7 @@ export default class Home extends React.Component {
         quote: data.quote,
         from: data.author,
       })
+      this.props.fetchMovieByTitle(data.author)
     })
   }
 
@@ -46,9 +36,11 @@ export default class Home extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-
-        <Text style={styles.quote}>{ this.state.quote }</Text>
-        <Text>-{ this.state.from }-</Text>
+        <Text>{JSON.stringify( this.props)}</Text>
+        <TouchableOpacity onPress={() => {navigate('MovieDetail', {})}}>
+          <Text style={styles.quote}>{ this.state.quote }</Text>
+          <Text>-{ this.state.from }-</Text>
+        </TouchableOpacity>
         <Button
          title="Other"
          onPress={() =>
@@ -73,3 +65,19 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
   },
 })
+
+function mapStateToProps(state) {
+  return {
+    tes: state,
+  };
+}
+
+function mapActionsToProps(dispatch) {
+  return {
+    fetchMovieByTitle: (title) => {
+      return dispatch(actions.fetchMovieByTitle(title))
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Home)
