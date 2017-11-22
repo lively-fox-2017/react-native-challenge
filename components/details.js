@@ -1,13 +1,31 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
-    Text,
     View,
     ScrollView,
     Image,
     FlatList,
-    Linking
-  } from 'react-native';
+    TouchableOpacity,
+    Linking  
+} from 'react-native';
+
+import { Container, 
+    Header, 
+    Title, 
+    Content, 
+    Footer, 
+    FooterTab, 
+    Button, 
+    Left, 
+    Right, 
+    Body, 
+    Icon, 
+    Text,
+    Card,
+    CardItem,
+    Thumbnail 
+} from 'native-base';
+
 
 import { 
   fetchNews,
@@ -25,18 +43,40 @@ class Details extends Component {
     render() {
         return (
             <View>
-            <Text>Detail Page</Text>
             {this.props.details !== undefined ? 
             <FlatList
-            data={this.props.details}
-            renderItem={({item}) =>
-            <View>
-                <Text>{item.title}</Text>
-                <Image style={{width: 1080, height: 1080}} source={{uri:item.urlToImage}} alt="Source"/>
-                <Text onPress={() => Linking.openURL(item.url)}>{ item.description }</Text>
-            </View>
-            }
-            />
+                data={this.props.details}
+                renderItem={({item}) =>
+                <Card>
+                    <CardItem header>
+                    <Left>
+                        <Thumbnail source={{uri: 'Image URL'}} />
+                        <Body>
+                        <Text>{ item.title }</Text>
+                        <Text note>{ item.author }</Text>
+                        </Body>
+                    </Left>
+                    </CardItem>
+                    <CardItem cardBody>
+                    <Image source={{uri: item.urlToImage}} style={{height: 200, width: null, flex: 1}}/>
+                    </CardItem>
+                    <CardItem>
+                        <Text>{item.description }</Text>
+                    </CardItem>
+                    <CardItem header>
+                    <Left>
+                    </Left>
+                    <Body>
+                        <Button transparent onPress={() => Linking.openURL(item.url)}>
+                        <Text>Original Article</Text>
+                        </Button>
+                    </Body>
+                    <Right>
+                    </Right>
+                    </CardItem>
+                </Card>
+                }
+                />
             :
             <Text>Loading Image</Text>
             }

@@ -1,14 +1,29 @@
+import Expo from 'expo'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {
-    Text,
     View,
     ScrollView,
     Image,
     FlatList,
-    Button
-  } from 'react-native';
+    TouchableOpacity  } from 'react-native';
+import { Container, 
+    Header, 
+    Title, 
+    Content, 
+    Footer, 
+    FooterTab, 
+    Button, 
+    Left, 
+    Right, 
+    Body, 
+    Icon, 
+    Text,
+    Card,
+    CardItem,
+    Thumbnail 
+} from 'native-base';
 
 import { 
   fetchNews
@@ -25,27 +40,60 @@ class Home extends Component {
     render() {
         const { navigate } = this.props.navigation
         return (
-            <View>
-            <Text>Hai saya home page</Text>
-            {this.props.items.articles !== undefined ? 
-            <FlatList
-            data={this.props.items.articles}
-            renderItem={({item}) =>
-            <View>
-                <Text>{item.title}</Text>
-                <Button title="Details" onPress={() => navigate('DetailsScreen', {id: item.title})}/>
-                <Image style={{width: 1080, height: 1080}} source={{uri:item.urlToImage}} alt="Source"/>
-            </View>
-            }
-            />
-            :
-            <Text>Loading Image</Text>
-            }
-            </View>
+            <Container>
+                <Content>
+                {this.props.items.articles !== undefined ? 
+                <FlatList
+                data={this.props.items.articles}
+                renderItem={({item}) =>
+                <TouchableOpacity onPress={() => navigate('DetailsScreen', {id: item.title})}>
+                    <Card>
+                        <CardItem>
+                        <Left>
+                            <Thumbnail source={{uri: 'Image URL'}} />
+                            <Body>
+                            <Text>{ item.title }</Text>
+                            <Text note>{ item.author }</Text>
+                            </Body>
+                        </Left>
+                        </CardItem>
+                        <CardItem cardBody>
+                        <Image source={{uri: item.urlToImage}} style={{height: 200, width: null, flex: 1}}/>
+                        </CardItem>
+                        <CardItem>
+                        <Left>
+                            <Button transparent>
+                            <Icon active name="thumbs-up" />
+                            <Text>12 Likes</Text>
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Button transparent>
+                            <Icon active name="chatbubbles" />
+                            <Text>4 Comments</Text>
+                            </Button>
+                        </Body>
+                        <Right>
+                            <Text>11h ago</Text>
+                        </Right>
+                        </CardItem>
+                    </Card>
+                </TouchableOpacity>
+                }
+                />
+                :
+                <Text>Loading Image</Text>
+                }
+                </Content>
+            </Container>
         )
     }
 
-  componentWillMount() {
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+        'Roboto': require('native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    });
     this.props.fetchNews()
   }
 }
