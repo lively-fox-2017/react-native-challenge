@@ -1,29 +1,17 @@
 import React from 'react'
-import { StackNavigator } from 'react-navigation'
+import { Provider } from 'react-redux'
+import store from './store'
 
-import News from './components/News'
-import NewsDetails from './components/NewsDetails'
-import Home from './components/Home'
+import Navigator from './navigators'
 
-const RootNavigator = StackNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: {
-      headerTitle: 'US News Agregator'
-    }
-  },
-  News: {
-    screen: News,
-    navigationOptions: {
-      headerTitle: 'News'
-    }
-  },
-  NewsDetails: {
-    screen: NewsDetails,
-    navigationOptions: {
-      headerTitle: 'NewsDetails'
-    }
+class App extends React.Component {
+  render () {
+    return (
+      <Provider store={store}>
+        <Navigator/>
+      </Provider>
+    )
   }
-})
+}
 
-export default RootNavigator
+export default App

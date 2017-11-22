@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { Card, Button, Header } from 'react-native-elements'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
-export default class BBCNews extends React.Component {
+import { GetArticlesFromApi } from '../actions/articles'
+
+class News extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -15,23 +18,24 @@ export default class BBCNews extends React.Component {
     }
   }
   componentDidMount () {
-    axios.get('https://newsapi.org/v2/top-headlines?sources='+this.props.navigation.state.params.id+'&apiKey=5f0060b13e974711adcdbd1d10b62286').then((response) => {
-      var articlesFromAxios = response.data.articles
-      this.setState({
-        articles: articlesFromAxios,
-        animating: false
-      })
-    }).catch((err) => {
-      console.error('sini bukan',err)
-    })
+    // axios.get('https://newsapi.org/v2/top-headlines?sources='+this.props.navigation.state.params.id+'&apiKey=5f0060b13e974711adcdbd1d10b62286').then((response) => {
+    //   var articlesFromAxios = response.data.articles
+    //   this.setState({
+    //     articles: articlesFromAxios,
+    //     animating: false
+    //   })
+    // }).catch((err) => {
+    //   console.error('sini bukan',err)
+    // })
+    this.props.getArticles(this.props.navigation.state.params.id)
   }
   render() {
     const { navigate } = this.props.navigation
-    if(this.state.animating) {
+    if(this.props.loading) {
       return (
         <View>
           <ActivityIndicator
-               animating = {this.state.animating}
+               animating = {this.props.loading}
                color = '#bc2b78'
                size = "large"
                style = {styles.activityIndicator}
@@ -46,29 +50,29 @@ export default class BBCNews extends React.Component {
               centerComponent={{ text: this.props.navigation.state.params.name, style: { color: '#fff' } }}
               rightComponent={{ icon: 'cached', color: '#fff' }}
             />
-            {this.state.articles.map((article, index) => {
-              return (
-                <Card title={article.title} key={index}>
-                  <Image
-                    style={styles.imageStyle}
-                    source={{uri:article.urlToImage}}
-                  />
-                  <Card>
-                    <Text>{article.description}</Text>
-                  </Card>
-                  <Button
-                    raised
-                    icon={{name: 'library-books', color:'black'}}
-                    title='Read More'
-                    backgroundColor="cyan"
-                    color="black"
-                    onPress={() =>
-                      navigate('NewsDetails', {uri:article.url})
-                    }
-                  />
+            <FlatList
+              data={this.props.articles}
+              keyExtractor={ (item, index) => index}
+              renderItem={({item, index}) => (<Card title={item.title} key={this._keyExtractor}>
+                <Image
+                  style={styles.imageStyle}
+                  source={{uri:item.urlToImage}}
+                />
+                <Card>
+                  <Text>{item.description}</Text>
                 </Card>
-              )
-            })}
+                <Button
+                  raised
+                  icon={{name: 'library-books', color:'black'}}
+                  title='Read More'
+                  backgroundColor="cyan"
+                  color="black"
+                  onPress={() =>
+                    navigate('NewsDetails', {uri:item.url})
+                  }
+                />
+              </Card>)}
+            />
           </ScrollView>
       );
     }
@@ -97,3 +101,18 @@ const styles = StyleSheet.create({
     paddingTop: 100
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    articles: state.Articles.articles,
+    loading: state.Articles.loading
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getArticles: (source) => dispatch(GetArticlesFromApi(source))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(News)

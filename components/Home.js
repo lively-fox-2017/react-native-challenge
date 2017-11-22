@@ -2,9 +2,11 @@ import React from 'react'
 import { Button } from 'react-native-elements'
 import { ScrollView, StyleSheet, Dimensions, Text } from 'react-native'
 import axios from 'axios'
-import shuffle from 'shuffle-array'
+import { connect } from 'react-redux'
 
-export default class Home extends React.Component {
+import { GetSourcesFromApi } from '../actions/sources'
+
+class Home extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -12,39 +14,7 @@ export default class Home extends React.Component {
     }
   }
   getMoreSource () {
-    axios.get('https://newsapi.org/v2/sources?language=en&country=us&apiKey=5f0060b13e974711adcdbd1d10b62286').then((response) => {
-      this.setState({
-        sources: response.data.sources
-      })
-    }).catch((err) => {
-      console.error('sini bukan',err)
-    })
-  }
-  moreSource () {
-    const { navigate } = this.props.navigation
-    var sources = [<Text key="1"></Text>]
-    if (this.state.sources.length > 0) {
-      shuffle(this.state.sources)
-      sources.pop()
-      for(let i = 0; i < 5; i++) {
-        // var randomed = Math.round(Math.random() * this.state.sources.length)
-        sources.push(
-            <Button
-              key={i}
-              style={styles.buttonNews}
-              raised
-              icon={{name: 'library-books', color:'white'}}
-              title={this.state.sources[i].name}
-              color="white"
-              backgroundColor="black"
-              onPress={() =>
-                navigate('News', { name: this.state.sources[i].name, id:this.state.sources[i].id })
-              }
-            />
-        )
-      }
-    }
-    return sources
+    this.props.getMoreSource()
   }
   render() {
     const { navigate } = this.props.navigation
@@ -91,8 +61,20 @@ export default class Home extends React.Component {
           }
           style={styles.buttonNews}
         />
-        {this.moreSource().map(source => {
-          return source
+        {this.props.sources.map((source, index) => {
+          return (
+            <Button
+              key={index}
+              style={styles.buttonNews}
+              raised
+              icon={{name: 'library-books', color:'white'}}
+              title={source.name}
+              color="white"
+              backgroundColor="black"
+              onPress={() =>
+                navigate('News', { name: source.name, id: source.id })
+              }
+            />)
         })}
       </ScrollView>
     )
@@ -110,3 +92,17 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    sources: state.Sources.sources
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMoreSource: () => dispatch(GetSourcesFromApi())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
