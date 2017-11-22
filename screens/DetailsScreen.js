@@ -12,6 +12,9 @@ import { openDotaURI } from '../helpers';
 export default class DetailsScreen extends React.Component {
   static navigationOptions = {
     title: 'Hero Details',
+    headerStyle: {
+      marginTop: 25
+    },
   }
 
   constructor() {

@@ -13,6 +13,9 @@ import { openDota, openDotaURI } from '../helpers';
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Dota 2 Heroes',
+    headerStyle: {
+      marginTop: 25
+    },
   }
 
   constructor() {
