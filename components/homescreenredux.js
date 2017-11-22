@@ -39,7 +39,7 @@ class HomeScreenRedux extends React.Component {
               </View>
 
               <View style={[styles.kontainer]}>
-                <TouchableOpacity onPress={() => navigate('Homedua', {data: data})}><Image source={{uri: data.urlToImage}} style={{width: 150, height: 100}} /></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate('KontenRedux', {data: data})}><Image source={{uri: data.urlToImage}} style={{width: 150, height: 100}} /></TouchableOpacity>
               </View>
             </View>
 
