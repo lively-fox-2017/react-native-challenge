@@ -1,10 +1,10 @@
 import React from 'react'
-import { Header } from 'react-native-elements'
+import { Header, Icon } from 'react-native-elements'
 
 const HeaderComponent = (props) => (
-  <Header leftComponent={{ icon: 'menu', color: '#fff' }}
-  centerComponent={{ text: 'Hello World', style: { color: '#fff' } }}
-  rightComponent={{ icon: 'home', color: '#fff' }} />
+  <Header leftComponent={<Icon name='menu' color='#fff' onPress={() => props.navigation.navigate('DrawerToggle')} />}
+  centerComponent={{ text: props.title, style: { color: '#fff' } }}
+  rightComponent={<Icon name='home' color='#fff' onPress={() => props.navigation.navigate('Home')} />} />
 )
 
 export default HeaderComponent
