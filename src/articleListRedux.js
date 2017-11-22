@@ -12,17 +12,17 @@ import {
 
 import { getNews } from './actions/articles'
 
-class App extends React.Component {
+class ArticleListRedux extends React.Component {
   componentWillMount () {
     this.props.fetchArticles()
   }
 
   render() {
-    // console.log("------------>", this.state.news);
+    // console.log("------------>", this.props);
     const { navigate } = this.props.navigation
     return (
       <ScrollView style={ styles.container }>
-        {this.state.news.map((article, index) => {
+        {this.props.articles.map((article, index) => {
           return (
             <TouchableOpacity style={ styles.articleItem } key={index} onPress={ () => navigate('Article', { article: article})}>
               <Image
@@ -37,7 +37,7 @@ class App extends React.Component {
           )
         })}
       </ScrollView>
-    );
+    )
   }
 }
 
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+  // console.log(state);
   return {
     articles: state.articlesReducer.news
   }
@@ -86,4 +87,4 @@ const mapDispatchToProps = (dispatch) => ({
     fetchArticles: () => dispatch(getNews())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleListRedux);

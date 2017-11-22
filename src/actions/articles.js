@@ -12,7 +12,7 @@ export const getNews = () => {
     axios.get('https://newsapi.org/v1/articles?source=cnn&sortBy=top&apiKey=496adc0095e04b3e9aca4c0ad74e1e63')
     .then(({data}) => {
       // console.log(data.articles);
-      return dipatch(articlesAction(data.articles))
+      return dispatch(articlesAction(data.articles))
 
     }).catch((reason) => {
       console.log("ERROR ", reason);

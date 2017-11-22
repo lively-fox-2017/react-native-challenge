@@ -4,7 +4,8 @@ const defaultState = {
 
 const articlesReducer = (state = defaultState, action) => {
   if (action.type === "ARTICLES") {
-    return {..state, news: action.news}
+    // console.log("Hai ", action.payload);
+    return {...state, news: action.payload}
   }
 
   return state

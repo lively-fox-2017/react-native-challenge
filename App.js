@@ -1,9 +1,21 @@
 import React from 'react';
-
+import { Provider } from 'react-redux'
 import { StackNavigator } from 'react-navigation'
 
+import store from './src/store'
 import articleListScreen from './src/articleList'
 import articleScreen from './src/article'
+import articleListReduxScreen from './src/articleListRedux'
+
+class App extends React.Component{
+  render() {
+    return (
+      <Provider store={ store }>
+        <AppNav />
+      </Provider>
+    )
+  }
+}
 
 const AppNav = StackNavigator({
   Home: {
@@ -19,9 +31,16 @@ const AppNav = StackNavigator({
       headerTitle: 'Article',
       headerBackTitle: 'Back'
     }
+  },
+
+  HomeRedux: {
+    screen: articleListReduxScreen,
+    navigationOptions: {
+      headerTitle: 'Home Redux'
+    }
   }
 }, {
-  initialRouteName: 'Home'
+  initialRouteName: 'HomeRedux'
 })
 
-export default AppNav;
+export default App;
