@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 
 import ListApi from '../components/ListApi';
 import ListBerita from '../components/ListBerita';
+import ListBeritaRedux from '../components/ListBeritaRedux'
 // ini adalah router
 export const Tabs = StackNavigator({
   ListApi: {
@@ -18,9 +19,15 @@ export const Tabs = StackNavigator({
   ListBerita: {
     screen: ListBerita,
     navigationOptions: {
-      headerTitle: 'back to List berita',
+      headerTitle: 'back to List Home',
     },
   },
+  ListBeritaRedux: {
+    screen: ListBeritaRedux,
+    navigationOptions: {
+      headerTitle: 'back to List Home'
+    }
+  }
 })
 
 AppRegistry.registerComponent('Navigasi', () => Navigasi);

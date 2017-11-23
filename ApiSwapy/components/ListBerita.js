@@ -17,9 +17,14 @@ export default class ListBerita extends Component {
   constructor() {
     super()
     this.state = {
-      swapi: []
+      swapi: [],
+      animating: true
     }
   }
+
+  closeActivityIndicator = () => setTimeout(() => this.setState({
+    animating: false
+  }), 6000)
 
   fetchApiSwapi(){
     let url = 'https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=cae471f07529494b80feef7591afce50';
@@ -37,10 +42,12 @@ export default class ListBerita extends Component {
 
   componentWillMount() {
     this.fetchApiSwapi()
+    this.closeActivityIndicator()
   }
 
   render() {
     const { navigate }  = this.props.navigation
+    const animating = this.state.animating
     return (
         <View containerStyle={{marginBottom: 0}}>
             <FlatList
@@ -55,7 +62,10 @@ export default class ListBerita extends Component {
                 </Card>
               )}
             />
-            <ActivityIndicator animating size="large" />
+            <ActivityIndicator
+             animating size="large"
+             animating = {animating}
+            />
         </View>
     )
   }
