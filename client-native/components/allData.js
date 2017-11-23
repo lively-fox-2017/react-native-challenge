@@ -1,31 +1,41 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getAllDataZoma  } from '../actions/zomatoActions'
+import { Provider } from 'react-redux'
 import { 
     StyleSheet, 
     Text, 
     View,
-    Button
+    Button,
+    // TouchableHighlight
 } from 'react-native';
+
 
 class AllDataClass extends React.Component {
     constructor(props) {
         super(props)
-
         this.pressButton = this.pressButton.bind(this)
+
     }
 
     componentWillMount () {
         this.props.getAllDataZoma()
+        // alert(JSON.stringify(this.props.navigation))
     }
 
+    static navigationOptions = {
+        title: 'Welcome Zomato Test API',
+    };
+
     render () {
+        const { navigate } = this.props.navigation;
         return (
-            <View>
+            <View style={styles.container}>
                 {this.showAllData.call(this)}
                 <Button
                 onPress={this.pressButton}
-                title= 'Click this !'
+                title="Click This !"
+                color="#841584"
                 />
             </View>
         )
@@ -36,20 +46,32 @@ class AllDataClass extends React.Component {
     }
 
     showAllData() {
+        const { navigate } = this.props.navigation;
         if (this.props.allData && this.props.allData.length > 0) {
-            return <View>
-                <Text>Masuk Fetch</Text>
-                <Text>All Categories from zomato</Text>
-                {this.props.allData.map(item=>{
+            // alert(navigate)
+            return (
+            <View>
+                <Text>Location Test in JAKARTA</Text>
+                <Text>ZOMATO CATEGORIES: </Text>
+                {this.props.allData.map((item,index)=>{
                     return (
-                        <Text>{item.categories.name}</Text>
+                        <Button
+                            key={index}
+                            title={item.categories.name}
+                            onPress={() =>
+                                navigate('Test', { category: `${item.categories.name}`, id:`${item.categories.id}` })}>
+                        >
+                        </Button>
                     )
                 })}
             </View>
+            )
         } else {
-            return <View>
-                <Text>Not Yet Fetched</Text>
+            return ( 
+            <View>
+                <Text>Not Yet Fetched....</Text>
             </View>
+            )
         }
     }
 }
@@ -64,7 +86,7 @@ const styles = StyleSheet.create({
 });
 
 const mapState = (state) => {
-    alert(JSON.stringify(JSON.stringify(state.allData.length)+ ' FROM REDUCER'))
+    // alert(JSON.stringify(JSON.stringify(state.allData.length)+ ' FROM MAP STATE'))
     return {
         allData: state.allData
     }
@@ -82,5 +104,4 @@ const connectedAlldata = connect(
 )(AllDataClass)
 
 // export default AllDataClass
-
 export default connectedAlldata
