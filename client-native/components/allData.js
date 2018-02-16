@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
 });
 
 const mapState = (state) => {
-    // alert(JSON.stringify(JSON.stringify(state.allData.length)+ ' FROM MAP STATE'))
     return {
         allData: state.allData
     }
@@ -103,5 +102,4 @@ const connectedAlldata = connect(
     mapActions
 )(AllDataClass)
 
-// export default AllDataClass
 export default connectedAlldata
